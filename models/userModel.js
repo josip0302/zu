@@ -1,61 +1,74 @@
 const pool = require("../config/db");
+/*const Pool = require('pg').Pool;
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres',
+  password: 'postgres',
+  port: 5433,
+})*/
+
+
 
 const getUsers = () => {
-    pool.query('SELECT * FROM korisnik order by idkorisnika asc', (error, results) => {
-      if (error) {
-        throw error
-      }
-      return results.rows;
-    })
-  }
-
-
-  const getUserById = (request, response) => {
-    const id = parseInt(request.params.id)
+  console.log("/api/USERS database query made");
+  return pool
+    .query("SELECT * FROM korisnik order by idkorisnika asc")
+    .then((results) => results["rows"])
+    .catch((err) => console.log(err));
+}
   
-    pool.query('SELECT * FROM korisnik WHERE idkorisnika = $1', [id], (error, results) => {
+
+
+  const getUserById = async (id) => {
+   
+    return pool
+    .query('SELECT * FROM korisnik WHERE idkorisnika = $1', [id])
+    .then((results) => results["rows"])
+    .catch((err) => console.log(err));
+    /*pool.query('SELECT * FROM korisnik WHERE idkorisnika = $1', [id], (error, results) => {
       if (error) {
         throw error
       }
       response.status(200).json(results.rows)
-    })
+    })*/
   }
 
-  const updateUser = (request, response) => {
-    const id = parseInt(request.params.id)
-    const { name, email } = request.body
-  
-    pool.query(
-      'UPDATE korisnik SET korisnicko_ime = $1, email = $2 WHERE idkorisnika = $3',
-      [name, email, id],
-      (error, results) => {
-        if (error) {
-          throw error
-        }
-        response.status(200).send(`User modified with ID: ${id}`)
-      }
-    )
+  const updateUser = (user) => {
+    console.log("updated : "+user.username);
+    
+    return pool
+    .query('UPDATE Korisnik SET korisnicko_ime = $1, email = $2 WHERE korisnicko_ime = $3', [user.korisnicko_ime,user.email,user.username])
+    .then((results) => results["rows"])
+    .catch((err) => console.log(err));
   }
 
-  const deleteUser = (request, response) => {
-    const id = parseInt(request.params.id)
-  
-    pool.query('DELETE FROM korisnik WHERE idkorisnika = $1', [id], (error, results) => {
+  const deleteUser =async (user) => {
+    console.log("deleted : "+user.username);
+    
+    return pool
+    .query('DELETE FROM korisnik where korisnicko_ime = $1', [user.username])
+    .then((results) => results["rows"])
+    .catch((err) => console.log(err));
+  }
+
+  const createUser = async (user) => {
+
+    const client = await pool.connect()
+    const data=await client.query('SELECT idkorisnika FROM korisnik order by idkorisnika  desc limit 1')
+    client.release() 
+    
+    let id = data["rows"][0]["idkorisnika"];
+    id++;
+    console.log(user);
+    
+    
+    return pool.query(`INSERT INTO Korisnik (IdKorisnika, ime, prezime, korisnicko_ime, datum_rodenja, email, lozinka) VALUES
+    ($1, $2, $3,$4, $5, $6,$7);`, [id, user.firstName,user.lastName,user.username,user.birthDate,user.email,user.password], (error, results) => {
       if (error) {
-        throw error
+        console.log(error)
       }
-      response.status(200).send(`Korisnik deleted with ID: ${id}`)
-    })
-  }
-
-  const createUser = (request, response) => {
-    const { name, email } = request.body
-  
-    pool.query('INSERT INTO korisnik (name, email) VALUES ($1, $2) RETURNING *', [name, email], (error, results) => {
-      if (error) {
-        throw error
-      }
-      response.status(201).send(`User added with ID: ${results.rows[0].id}`)
+     
     })
   }
 

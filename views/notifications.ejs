@@ -1,0 +1,38 @@
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../public/style.css">
+    <title>Naslovnica Župnog Ureda</title>
+</head>
+<body>
+    <header>
+        <h1>Župni Ured Sv. Ivana</h1>
+    </header>
+    <nav>
+        <a href="#">Obavijesti</a>
+        <a href="/addUser">Dodaj korisnika</a>
+        <a href="/deleteUser">Ukloni korisnika</a>
+        <a href="/editUser">Uredi korisničke podatke</a>
+        <a href="/users">Pregledaj korisnike</a>
+    </nav>
+    <div class="container">
+        <div class="container">
+            <div id="notifications">
+                <h2>Obavijesti</h2>
+                <p>Ovdje možete pronaći najnovije obavijesti iz naše župe.</p>
+                <ul>
+                    
+                    <% obavijesti.forEach(function(obavijest) { %>
+                        <li>
+                            <h3><%= obavijest.naziv %></h3>
+                            <p><%= obavijest.tekst %></p>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Župni Ured Sv. Ivana. Sva prava pridržana.</p>
+    </footer>

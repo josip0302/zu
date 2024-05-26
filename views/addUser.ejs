@@ -1,0 +1,122 @@
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../public/style.css">
+    <title>Naslovnica Župnog Ureda</title>
+</head>
+<body>
+    <header>
+        <h1>Župni Ured Sv. Ivana</h1>
+    </header>
+    <nav>
+        <a href="/notifications">Obavijesti</a>
+        <a href="#">Dodaj korisnika</a>
+        <a href="/deleteUser">Ukloni korisnika</a>
+        <a href="/editUser">Uredi korisničke podatke</a>
+        <a href="/users">Pregledaj korisnike</a>
+    </nav>
+    <div class="container">
+        <div id="addUser">
+            <h2>Dodaj korisnika</h2>
+            <form id="userForm">
+                <div>
+                    <label for="firstName">Ime:</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div>
+                    <label for="lastName">Prezime:</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div>
+                    <label for="username">Korisničko ime:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div>
+                    <label for="birthDate">Datum rođenja:</label>
+                    <input type="date" id="birthDate" name="birthDate" required>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <span id="emailError" style="color:red; display:none;">Neispravan email</span>
+
+                </div>
+                <div>
+                    <label for="password">Lozinka:</label>
+                    <input type="password" id="password" name="password" required>
+                    <span id="passwordError" style="color:red; display:none;">Lozinka mora sadržavati barem 8 znakova, barem 1 broj, specijalni znak i barem jedno veliko slovo.</span>
+
+                </div>
+                
+                <button type="submit">Dodaj korisnika</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Župni Ured Sv. Ivana. Sva prava pridržana.</p>
+    </footer>
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Regex za validaciju emaila
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailError = document.getElementById('emailError');
+            
+            // Regex za validaciju lozinke
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+            const passwordError = document.getElementById('passwordError');
+            
+            let valid = true;
+            
+            if (!emailRegex.test(email)) {
+                emailError.style.display = 'block';
+                valid = false;
+            } else {
+                emailError.style.display = 'none';
+            }
+            
+            if (!passwordRegex.test(password)) {
+                passwordError.style.display = 'block';
+                valid = false;
+            } else {
+                passwordError.style.display = 'none';
+            }
+            
+            if (valid) {
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const username = document.getElementById('username').value;
+                const birthDate = document.getElementById('birthDate').value;
+                
+
+                const user = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    username: username,
+                    birthDate: birthDate,
+                    email: email,
+                    password: password,
+                   
+                };
+
+                console.log(user);
+
+            // Slanje podataka na backend (opcionalno)
+            fetch('/createUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            })
+            .then(response => response.json())
+            .then(data => console.log('Uspjeh:', data))
+            .catch(error => console.error('Greška:', error));
+        }});
+    </script>
+</body>
+</html>

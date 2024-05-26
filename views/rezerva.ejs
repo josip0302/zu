@@ -1,0 +1,44 @@
+
+
+  <html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../public/style.css">
+    <title>Naslovnica Župnog Ureda</title>
+</head>
+<body>
+    <header>
+        <h1>Župni Ured Sv. Ivana</h1>
+    </header>
+    <nav>
+        <a href="/notifications">Obavijesti</a>
+        <a href="/addUser">Dodaj korisnika</a>
+        <a href="/deleteUser">Ukloni korisnika</a>
+        <a href="/editUser">Uredi korisničke podatke</a>
+        <a href="#">Pregledaj korisnike</a>
+    </nav>
+    <div class="container">
+      <ul>
+        <ul>
+          <% Users.forEach(function(mascot) { %>
+            <li>
+              <strong><%= mascot.ime %></strong>
+              <%= mascot.prezime %>,
+               <%= mascot.korisnicko_ime %>,
+               <%= mascot.email %>
+               
+            </li>
+          <% }); %> 
+        </ul>
+      </ul>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Župni Ured Sv. Ivana. Sva prava pridržana.</p>
+    </footer>
+    <script>
+      
+    </script>
+</body>
+</html>

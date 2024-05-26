@@ -1,19 +1,76 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Books</title>
-  </head>
-  <body>
-    <h1>Books</h1>
-    <ul>
-      <ul>
-        <% Users.forEach(function(mascot) { %>
-          <li>
-            <strong><%= mascot.ime %></strong>
-            representing <%= mascot.prezime %>
-          </li>
-        <% }); %>
-      </ul>
-    </ul>
-  </body>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../public/style.css">
+    <title>Naslovnica Župnog Ureda</title>
+</head>
+<body>
+    <header>
+        <h1>Župni Ured Sv. Ivana</h1>
+    </header>
+    <nav>
+        <a href="/notifications">Obavijesti</a>
+        <a href="/addUser">Dodaj korisnika</a>
+        <a href="/deleteUser">Ukloni korisnika</a>
+        <a href="/editUser">Uredi korisničke podatke</a>
+        <a href="/users">Pregledaj korisnike</a>
+
+    </nav>
+    <footer>
+        <p>&copy; 2024 Župni Ured Sv. Ivana. Sva prava pridržana.</p>
+    </footer>
+    <script>
+        function showSection(sectionId) {
+            document.getElementById('notifications').classList.add('hidden');
+            document.getElementById('addUser').classList.add('hidden');
+            document.getElementById('deleteUser').classList.add('hidden');
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        function deleteUser() {
+            const deleteUsername = document.getElementById('deleteUsername').value;
+            const deleteEmail = document.getElementById('deleteEmail').value;
+
+            console.log("Brisanje korisnika - Korisničko ime:", deleteUsername, "Email:", deleteEmail);
+            
+            // Ovdje možete dodati kod za brisanje korisnika (na primjer, slanje zahtjeva na backend)
+        }
+
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const username = document.getElementById('username').value;
+            const birthDate = document.getElementById('birthDate').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+
+            const user = {
+                firstName: firstName,
+                lastName: lastName,
+                username: username,
+                birthDate: birthDate,
+                email: email,
+                password: password,
+                role: role
+            };
+
+            console.log(user);
+
+            // Slanje podataka na backend (opcionalno)
+            fetch('URL_VAŠEG_SERVERA', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            })
+            .then(response => response.json())
+            .then(data => console.log('Uspjeh:', data))
+            .catch(error => console.error('Greška:', error));
+        });
+    </script>
+</body>
 </html>

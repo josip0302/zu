@@ -1,0 +1,65 @@
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../public/style.css">
+    <title>Naslovnica Župnog Ureda</title>
+</head>
+<body>
+    <header>
+        <h1>Župni Ured Sv. Ivana</h1>
+    </header>
+    <nav>
+        <a href="/notifications">Obavijesti</a>
+        <a href="/addUser">Dodaj korisnika</a>
+        <a href="#">Ukloni korisnika</a>
+        <a href="/editUser">Uredi korisničke podatke</a>
+        <a href="/users">Pregledaj korisnike</a>
+
+    </nav>
+    <div class="container">
+        <div id="deleteUser">
+            <h2>Izbriši korisnika</h2>
+            <form id="deleteUserForm">
+                <div>
+                    <label for="deleteUsername">Korisničko ime korisnika za brisanje:</label>
+                    <input type="text" id="deleteUsername" name="deleteUsername" required>
+                </div>
+                
+                <button type="del">Izbriši korisnika</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Župni Ured Sv. Ivana. Sva prava pridržana.</p>
+    </footer>
+    <script>
+        document.getElementById('deleteUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+          
+            const username = document.getElementById('deleteUsername').value;
+            
+
+            const user = {
+               
+                username: username,
+              
+            };
+
+            console.log(user);
+
+            // Slanje podataka na backend (opcionalno)
+            fetch('/deleteUser', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            })
+            .then(response => response.json())
+            .then(data => console.log('Uspjeh:', data))
+            .catch(error => console.error('Greška:', error));
+        });
+    </script>
+</body>
+</html>

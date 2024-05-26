@@ -1,0 +1,72 @@
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../public/style.css">
+    <title>Naslovnica Župnog Ureda</title>
+</head>
+<body>
+    <header>
+        <h1>Župni Ured Sv. Ivana</h1>
+    </header>
+    <nav>
+        <a href="/notifications">Obavijesti</a>
+        <a href="/addUser">Dodaj korisnika</a>
+        <a href="/deleteUser">Ukloni korisnika</a>
+        <a href="#">Uredi korisničke podatke</a>
+        <a href="/users">Pregledaj korisnike</a>
+    </nav>
+    <div class="container">
+        <div id="editUser">
+            <h2>Uredi korisničke podatke</h2>
+            <form id="editUserForm">
+                <div>
+                    <label for="editUsername">Korisničko ime:</label>
+                    <input type="text" id="oldUsername" name="editUsername" required>
+                </div>
+                <div>
+                    <label for="editUsername">Novo korisničko ime:</label>
+                    <input type="text" id="editUsername" name="editUsername" required>
+                </div>
+                <div>
+                    <label for="editEmail">Novi email:</label>
+                    <input type="email" id="editEmail" name="editEmail" required>
+                </div>
+                <button type="submit" >Spremi promjene</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Župni Ured Sv. Ivana. Sva prava pridržana.</p>
+    </footer>
+    <script>
+        document.getElementById('editUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const korisnicko_ime=document.getElementById('oldUsername').value;
+            const editUsername = document.getElementById('editUsername').value;
+            const editEmail = document.getElementById('editEmail').value;
+            const user = {
+                username:korisnicko_ime,
+                email:editEmail,
+                korisnicko_ime: editUsername,
+                
+            };
+            
+
+            console.log(user);
+
+            // Slanje podataka na backend (opcionalno)
+            fetch('/updateUser', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            })
+            .then(response => response.json())
+            .then(data => console.log('Uspjeh:', data))
+            .catch(error => console.error('Greška:', error));
+        });
+    </script>
+</body>
+</html>
